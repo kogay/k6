@@ -1,8 +1,10 @@
 'use strict;'
 
 import http from 'k6/http';
+import exec from 'k6/execution';
 import { check, fail } from 'k6';
 import { sleep } from 'k6';
+import execution from 'k6/execution';
 
 //const ACCESS_TOKEN = "l989sumy0evz9076d74h5uxn"; // test01
 //const ACCESS_TOKEN = "l9peznle000829c772ear2x5"; // test11
@@ -13,21 +15,26 @@ let header = {
 };
 
 export let options = {
-/*
   stages: [
-    { target: 10, duration: '1s' },
     { target: 20, duration: '1s' },
-    { target: 30, duration: '1s' }
-  ]
-*/
+    { target: 40, duration: '1s' },
+    { target: 60, duration: '1s' },
+    { target: 80, duration: '1s' },
+    { target: 100, duration: '10s' },
+    /*{ target: 60, duration: '1s' },
+    { target: 70, duration: '1s' },
+    { target: 80, duration: '1s' },
+    { target: 90, duration: '1s' },
+    { target: 100, duration: '20s' }*/
+  ],
 //  vus: 10,
 //  iterations: 10,
-//  duration: '10s',
+//  duration: '30s',
 };
 
 export function setup() {
-  return login_ui();
-//  return newdata_api();
+//  return login_ui();
+  return newdata_api();
 //  return login_api();
 //  return sync_api();
 }
@@ -38,7 +45,8 @@ export default function (data) {
     "response code was 200": (response) => response.status == 200,
   });
   if (!checkResult) {
-    fail("status code was not 200");
+    fail("status code was not 200. Error code: "+response.error_code);
+//    exec.test.abort('Abort test. Error code: '+response.error_code);    
   }
   sleep(1);
 }
