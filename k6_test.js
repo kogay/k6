@@ -16,9 +16,8 @@ let header = {
 
 export let options = {
   stages: [
-    { target: 10000, duration: '5s' },
-    { target: 20000, duration: '5s' },
-    { target: 30000, duration: '10s' },
+    { target: 80, duration: '5s' },
+    { target: 110, duration: '120s' },
   ],
 //  vus: 100,
 //  iterations: 10,
@@ -26,8 +25,8 @@ export let options = {
 };
 
 export function setup() {
-  return login_ui();
-//  return newdata_api();
+//  return login_ui();
+  return newdata_api();
 //  return login_api();
 //  return sync_api();
 }
@@ -41,7 +40,7 @@ export default function (data) {
     fail("status code was not 200. Error code: "+response.error_code);
 //    exec.test.abort('Abort test. Error code: '+response.error_code);    
   }
-//  sleep(1);
+  sleep(1);
 }
 
 // **************************************************************
