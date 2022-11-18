@@ -15,10 +15,12 @@ let header = {
 };
 
 export let options = {
+  
   stages: [
     { target: 80, duration: '5s' },
-    { target: 110, duration: '120s' },
+    { target: 100, duration: '60s' },
   ],
+  
 //  vus: 100,
 //  iterations: 10,
 //  duration: '30s',
@@ -32,14 +34,34 @@ export function setup() {
 }
 
 export default function (data) {
+  let c_time = new Date();
+  let log_post = {
+    method: 'POST',
+    URL: 'https://mc.megakiku.net/api/settings/log',
+    params: {
+      headers: header,
+    },
+    querystring: null,
+    body: JSON.stringify({
+      "screen_id": "30", // 30:最新計測値
+      "access_type": "0", // 0:画面遷移
+      "log": "（※ツールによる記録）",
+      "detail": [],
+      "record_date": c_time.toJSON()
+    })
+  }
+  
   const response = http.request(data.method, data.URL+data.querystring, data.body, data.params);
+  //const response = http.request(log_post.method, log_post.URL, log_post.body, log_post.params);
   const checkResult = check(response, {
     "response code was 200": (response) => response.status == 200,
   });
   if (!checkResult) {
-    fail("status code was not 200. Error code: "+response.error_code);
-//    exec.test.abort('Abort test. Error code: '+response.error_code);    
+//    fail("status code was not 200. Error code: "+response.error_code);
+    exec.test.abort('Abort test. Error code: '+response.error_code);    
   }
+
+  http.request(log_post.method, log_post.URL, log_post.body, log_post.params);
   sleep(1);
 }
 
